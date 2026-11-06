@@ -1,0 +1,58 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: scoutnote-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: scoutnote
+      POSTGRES_PASSWORD: scoutnotepassword
+      POSTGRES_DB: scoutnote_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scoutnote -d scoutnote_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mcp-notes:
+    build:
+      context: ./mcp-notes
+      dockerfile: Dockerfile
+    container_name: scoutnote-mcp-notes
+    restart: unless-stopped
+    environment:
+      PORT: 3001
+      DATABASE_URL: ${DOCKER_DATABASE_URL:-postgres://scoutnote:scoutnotepassword@postgres:5432/scoutnote_db}
+      DATABASE_SSL: ${DOCKER_DATABASE_SSL:-false}
+      MCP_BEARER_TOKEN: ${MCP_BEARER_TOKEN:-dev-bearer-secret}
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: scoutnote-gateway
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+      LLM_BASE_URL: ${LLM_BASE_URL}
+      LLM_API_KEY: ${LLM_API_KEY}
+      LLM_MODEL: ${LLM_MODEL:-gemini-3.5-flash-lite}
+      EXA_MCP_URL: ${EXA_MCP_URL:-https://mcp.exa.ai/mcp}
+      EXA_API_KEY: ${EXA_API_KEY}
+      NOTES_MCP_URL: http://mcp-notes:3001/mcp
+      MCP_BEARER_TOKEN: ${MCP_BEARER_TOKEN:-dev-bearer-secret}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mcp-notes
+
+volumes:
+  pgdata:

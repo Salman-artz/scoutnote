@@ -1,0 +1,17 @@
+{
+  "expo": {
+    "name": "ScoutNote",
+    "slug": "scoutnote",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "scheme": "scoutnote",
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

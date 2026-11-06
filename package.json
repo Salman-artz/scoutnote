@@ -1,6 +1,11 @@
 {
   "name": "scoutnote",
   "private": true,
+  "scripts": {
+    "typecheck": "npm --prefix mcp-notes run typecheck && npm --prefix gateway run typecheck && npm --prefix app run typecheck",
+    "build": "npm --prefix mcp-notes run build && npm --prefix gateway run build",
+    "lint": "npm --prefix mcp-notes run lint && npm --prefix gateway run lint"
+  },
   "devDependencies": {
     "@modelcontextprotocol/sdk": "^1.6.0",
     "@types/node": "^22.13.0",
