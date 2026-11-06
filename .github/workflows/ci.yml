@@ -43,10 +43,6 @@ jobs:
       - name: Build package
         run: npm run build --if-present
 
-      - name: Export Expo app
-        if: matrix.package == 'app'
-        run: npx expo export --platform web
-
   docker-build:
     name: Docker build ${{ matrix.service }}
     runs-on: ubuntu-latest
