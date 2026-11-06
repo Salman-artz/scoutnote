@@ -1,6 +1,6 @@
 # ScoutNote
 
-[![CI](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml)
+[![CI](https://github.com/Salman-artz/scoutnote/actions/workflows/ci.yml/badge.svg)](https://github.com/Salman-artz/scoutnote/actions/workflows/ci.yml)
 
 ScoutNote adalah monorepo sistem catatan cerdas terintegrasi yang menghubungkan asisten chatbot mobile (Expo / React Native) ke dua server Model Context Protocol (MCP): **MCP A** (Exa Search remote untuk pembacaan web) dan **MCP B** (server internal kustom untuk persistensi catatan ke PostgreSQL).
 
@@ -130,7 +130,6 @@ docker compose up -d --build gateway mcp-notes
 
 Workflow CI berjalan pada setiap push dan pull request ke `main`. Job matrix menjalankan `npm ci`, typecheck, lint, dan build/export pada `/app`, `/gateway`, dan `/mcp-notes`. Job Docker membangun image gateway dan MCP Notes memakai Node.js 20, sama dengan Dockerfile. CI tidak memanggil Exa, LLM, database cloud, atau endpoint yang membutuhkan secret.
 
-Badge di bagian atas README memakai placeholder `OWNER/REPOSITORY`; ganti dua nilai tersebut dengan owner dan nama repository GitHub agar badge aktif.
 
 Cara memastikan run pertama lulus:
 
