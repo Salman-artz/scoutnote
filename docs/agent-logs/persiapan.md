@@ -457,6 +457,21 @@ HASIL: SEMUA TAHAP PENGUJIAN DATABASE LULUS (OK).
 
 ---
 
+### 15. GitHub Actions CI Workflow (`.github/workflows/ci.yml`)
+
+#### Prompt Pengguna
+> Tambahkan workflow CI untuk push/pull request ke `main`, jalankan install, typecheck, lint, build untuk `/app`, `/gateway`, `/mcp-notes`, Docker build untuk gateway dan MCP Notes, tanpa secret atau test Exa/LLM. Tambahkan badge README, dokumentasi deploy lokal dan rollback, validasi YAML, lalu commit `ci: github actions workflow (P11)`.
+
+#### Tindakan & Eksekusi Agent
+1. Membuat `.github/workflows/ci.yml` dengan trigger `push` dan `pull_request` ke `main`.
+2. Membuat matrix job terpisah untuk `app`, `gateway`, dan `mcp-notes` dengan Node.js 20, `npm ci`, cache npm per `package-lock.json`, typecheck, lint, dan build/export.
+3. Menambahkan matrix Docker build untuk `gateway/Dockerfile` dan `mcp-notes/Dockerfile`.
+4. Tidak menambahkan secret, Exa test, LLM test, atau database cloud test ke CI.
+5. Menambahkan badge workflow serta dokumentasi deployment lokal Docker Compose dan rollback di `README.md`.
+6. Validasi sintaks dilakukan melalui inspeksi struktur YAML; runtime validation dilakukan oleh GitHub Actions pada run pertama.
+
+---
+
 ## Ringkasan Akhir Status Repositori
 
 - **Branch**: `main`

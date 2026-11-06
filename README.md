@@ -1,5 +1,7 @@
 # ScoutNote
 
+[![CI](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml/badge.svg)](https://github.com/OWNER/REPOSITORY/actions/workflows/ci.yml)
+
 ScoutNote adalah monorepo sistem catatan cerdas terintegrasi yang menghubungkan asisten chatbot mobile (Expo / React Native) ke dua server Model Context Protocol (MCP): **MCP A** (Exa Search remote untuk pembacaan web) dan **MCP B** (server internal kustom untuk persistensi catatan ke PostgreSQL).
 
 ---
@@ -90,6 +92,53 @@ npx tsx scripts/check-db.ts
 ```
 
 ---
+
+## Deployment dan Rollback
+
+Deployment saat ini berjalan lokal melalui Docker Compose. Gateway dan MCP Notes dibangun dari Dockerfile masing-masing, sedangkan PostgreSQL memakai volume lokal.
+
+```bash
+docker compose build
+docker compose up -d
+docker compose ps
+```
+
+Akses lokal:
+
+- Gateway: `http://localhost:3000`
+- MCP Notes: `http://localhost:3001`
+- PostgreSQL: `localhost:5432`
+
+Tunnel atau hosting cloud belum menjadi deployment aktif. Keduanya dapat ditambahkan kemudian dengan mengarahkan gateway ke URL MCP Notes publik dan mengisi environment variable pada platform tujuan. Secret tetap disimpan di secret manager platform, bukan di workflow atau repository.
+
+Rollback lokal memakai image/tag atau commit sebelumnya:
+
+```bash
+git checkout <commit-sebelumnya>
+docker compose build --no-cache gateway mcp-notes
+docker compose up -d gateway mcp-notes
+```
+
+Untuk kembali ke kode terbaru:
+
+```bash
+git checkout main
+docker compose up -d --build gateway mcp-notes
+```
+
+### CI GitHub Actions
+
+Workflow CI berjalan pada setiap push dan pull request ke `main`. Job matrix menjalankan `npm ci`, typecheck, lint, dan build/export pada `/app`, `/gateway`, dan `/mcp-notes`. Job Docker membangun image gateway dan MCP Notes memakai Node.js 20, sama dengan Dockerfile. CI tidak memanggil Exa, LLM, database cloud, atau endpoint yang membutuhkan secret.
+
+Badge di bagian atas README memakai placeholder `OWNER/REPOSITORY`; ganti dua nilai tersebut dengan owner dan nama repository GitHub agar badge aktif.
+
+Cara memastikan run pertama lulus:
+
+1. Push commit ini ke branch `main`, atau buka pull request menuju `main`.
+2. Buka tab **Actions** di repository GitHub.
+3. Pilih workflow **CI** dan run terbaru.
+4. Pastikan seluruh job matrix (`app`, `gateway`, `mcp-notes`) dan kedua job Docker berstatus hijau.
+5. Jika gagal, buka job yang gagal, periksa langkah pertama berwarna merah, perbaiki commit, lalu push ulang.
 
 ## Dokumentasi Arsitektur & Spesifikasi
 
