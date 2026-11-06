@@ -1,0 +1,5 @@
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { useTheme } from "../theme/ThemeContext";
+export function MessageBubble({ role, content, children }: { role: "user" | "assistant"; content: string; children?: React.ReactNode }) { const { tokens } = useTheme(); return <View style={[styles.wrap, role === "user" && styles.userWrap]}><Text style={[styles.label, { color: tokens.muted }]}>{role === "user" ? "Anda" : "ScoutNote"}</Text><View style={[styles.bubble, { backgroundColor: role === "user" ? tokens.primary : tokens.surface, borderColor: tokens.border }]}><Text style={{ color: role === "user" ? "#fff" : tokens.text, fontSize: 15, lineHeight: 22 }}>{content || (role === "assistant" ? " " : "")}</Text>{children}</View></View>; }
+const styles = StyleSheet.create({ wrap: { marginVertical: 6, alignItems: "flex-start" }, userWrap: { alignItems: "flex-end" }, label: { fontSize: 11, marginBottom: 4 }, bubble: { maxWidth: "92%", padding: 12, borderRadius: 16, borderWidth: 1 } });

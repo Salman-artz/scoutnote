@@ -1,9 +1,6 @@
-import { Stack } from "expo-router";
+import { Tabs } from "expo-router";
+import { ThemeProvider } from "../theme/ThemeContext";
 
 export default function RootLayout() {
-  return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-    </Stack>
-  );
+  return <ThemeProvider><Tabs screenOptions={{ headerShown: false }}><Tabs.Screen name="index" options={{ title: "Chat" }} /><Tabs.Screen name="notes" options={{ title: "Notes" }} /></Tabs></ThemeProvider>;
 }
